@@ -82,39 +82,39 @@ def plots(dataframe, column_list):
     for column in column_list:
         if column not in dataframe.columns:
             raise KeyError
-    original_sub = dataframe.loc[:,column_list]
-    df = centre_and_scale(dataframe,column_list)
-    df_sub = df.loc[:,column_list]
-    sub_cols = list(df_sub.columns)
-    cols = list(original_sub.columns)
-    col_length = len(sub_cols)
+    original_df = dataframe.loc[:,column_list]
+    trans_df = centre_and_scale(dataframe,column_list).loc[:,column_list]
+
+    trans_cols = list(trans_df.columns)
+    original_cols = list(original_df.columns)
+    col_length = len(trans_cols)
 
 
     for i in range(0,col_length):
         figure = plt.figure(figsize=(30,10))
 
         plt.subplot(221)
-        plt.boxplot(original_sub.iloc[:,i],0,'rs',0)
-        plt.title("Original " + cols[i])
+        plt.boxplot(original_df[column_list[i-1]],0,'rs',0)
+        plt.title("Original " + original_cols[i])
         plt.xlabel("Value")
-        plt.ylabel(cols[i])
+        plt.ylabel(original_cols[i])
 
         plt.subplot(222)
-        plt.boxplot(df_sub.iloc[:,i], 0, 'rs', 0)
-        plt.title("Transformed "+sub_cols[i])
+        plt.boxplot(trans_df[column_list[i]], 0, 'rs', 0)
+        plt.title("Transformed "+trans_cols[i])
         plt.xlabel("Value")
-        plt.ylabel(sub_cols[i])
+        plt.ylabel(trans_cols[i])
 
         plt.subplot(223)
-        plt.hist(original_sub.iloc[:,i], bins=10)
-        plt.title("Original "+cols[i])
+        plt.hist(original_df[column_list[i]], bins=20)
+        plt.title("Original "+original_cols[i])
         plt.xlabel("Value")
-        plt.ylabel(cols[i])
+        plt.ylabel(original_cols[i])
         plt.show()
 
         plt.subplot(224)
-        plt.hist(df_sub.iloc[:,i], bins=10)
-        plt.title("Transformed "+sub_cols[i])
+        plt.hist(trans_df[column_list[i]], bins=20)
+        plt.title("Transformed "+trans_cols[i])
         plt.xlabel("Value")
-        plt.ylabel(sub_cols[i])
+        plt.ylabel(trans_cols[i])
         plt.show()
